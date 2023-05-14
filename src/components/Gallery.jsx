@@ -1,12 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useImagesContext } from '../context';
+
+const url = `https://api.unsplash.com/search/photos?&client_id=${
+  import.meta.env.VITE_ACCESS_KEY
+}`;
+
 const Gallery = () => {
+  const { searchTerm } = useImagesContext();
   const { isLoading, data, isError } = useQuery({
-    queryKey: ['images'],
+    queryKey: ['images', searchTerm],
     queryFn: async () => {
-      const response = await axios(
-        'https://api.unsplash.com/search/photos?page=1&query=dog&client_id=ihAgO_sB6bzHdaOJz2lueO-NYuIapOSWHohKDJV35Eo'
-      );
+      const response = await axios(`${url}&query=${searchTerm}`);
       return response.data;
     },
   });
@@ -19,6 +24,15 @@ const Gallery = () => {
     return <div className='error'>There was an error...</div>;
   }
 
-  return <section className='gallery'></section>;
+  return (
+    <section>
+      <div className='section-center gallery'>
+        {data.results.map((photo) => {
+          const srcImg = photo?.urls?.regular;
+          return <img src={srcImg} key={photo.id} />;
+        })}
+      </div>
+    </section>
+  );
 };
 export default Gallery;

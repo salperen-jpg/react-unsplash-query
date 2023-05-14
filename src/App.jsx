@@ -1,14 +1,11 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
 import Form from './components/Form';
 import Gallery from './components/Gallery';
+import Theme from './components/Theme';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <main>
+      <Theme />
       <Form />
       <Gallery />
     </main>
